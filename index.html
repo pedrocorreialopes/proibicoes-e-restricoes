@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Página informativa e interativa sobre proibições e restrições nacionais de envio pelos Correios, baseada no documento anexo." />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Proibições e Restrições Nacionais | Guia Interativo</title>
+  <style>
+    :root {
+      --bg: #08111f;
+      --bg-soft: rgba(15, 23, 42, 0.72);
+      --surface: rgba(255, 255, 255, 0.08);
+      --surface-strong: rgba(255, 255, 255, 0.12);
+      --card: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --text: #e5eefb;
+      --muted: #a8b6cf;
+      --title: #f8fbff;
+      --primary: #38bdf8;
+      --primary-strong: #0ea5e9;
+      --accent: #f97316;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 20px 60px rgba(2, 8, 23, 0.35);
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+      --container: 1200px;
+      --transition: 180ms ease;
+    }
+
+    :root[data-theme="light"] {
+      --bg: #f4f8fc;
+      --bg-soft: rgba(255, 255, 255, 0.86);
+      --surface: rgba(255, 255, 255, 0.8);
+      --surface-strong: rgba(255, 255, 255, 0.95);
+      --card: rgba(255, 255, 255, 0.88);
+      --card-border: rgba(15, 23, 42, 0.08);
+      --text: #15233b;
+      --muted: #586781;
+      --title: #071224;
+      --primary: #0284c7;
+      --primary-strong: #0369a1;
+      --accent: #ea580c;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --shadow: 0 18px 50px rgba(15, 23, 42, 0.10);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.20), transparent 25%),
+        radial-gradient(circle at top right, rgba(249, 115, 22, 0.16), transparent 22%),
+        linear-gradient(180deg, #020817 0%, var(--bg) 30%, #09131f 100%);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    :root[data-theme="light"] body {
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 25%),
+        radial-gradient(circle at top right, rgba(249, 115, 22, 0.08), transparent 22%),
+        linear-gradient(180deg, #eef6fb 0%, var(--bg) 40%, #f7fbff 100%);
+    }
+
+    a { color: var(--primary); }
+    img { max-width: 100%; display: block; }
+    button, input { font: inherit; }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--container));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: color-mix(in srgb, var(--bg-soft) 88%, transparent);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .topbar__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      min-width: 0;
+    }
+
+    .brand__badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 1.3rem;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: var(--shadow);
+      flex-shrink: 0;
+    }
+
+    .brand__text strong {
+      display: block;
+      color: var(--title);
+      font-size: 0.98rem;
+      letter-spacing: 0.01em;
+    }
+
+    .brand__text span {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .topbar__actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .button,
+    .icon-button {
+      border: 1px solid var(--card-border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform var(--transition), border-color var(--transition), background var(--transition);
+    }
+
+    .button:hover,
+    .icon-button:hover,
+    .button:focus-visible,
+    .icon-button:focus-visible {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--primary) 58%, white);
+      outline: none;
+    }
+
+    .button {
+      padding: 0.72rem 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .button--primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+      color: white;
+      border-color: transparent;
+    }
+
+    .button--ghost {
+      background: transparent;
+    }
+
+    .icon-button {
+      width: 44px;
+      height: 44px;
+      display: inline-grid;
+      place-items: center;
+      font-size: 1rem;
+    }
+
+    .hero {
+      padding: 4.25rem 0 2.5rem;
+    }
+
+    .hero__grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1.6rem;
+      align-items: stretch;
+    }
+
+    .hero__panel,
+    .glass {
+      background: color-mix(in srgb, var(--surface-strong) 92%, transparent);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero__panel {
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero__panel::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -30% auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.22), transparent 60%);
+      z-index: -1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      color: #7dd3fc;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      margin: 0;
+      color: var(--title);
+      font-size: clamp(2rem, 4vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+
+    .hero p {
+      margin: 1.1rem 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 65ch;
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.6rem;
+    }
+
+    .hero__stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.9rem;
+      margin-top: 1.8rem;
+    }
+
+    .stat {
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--title);
+      font-size: 1.4rem;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat span {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .hero__side {
+      padding: 1.4rem;
+      display: grid;
+      gap: 1rem;
+      align-content: start;
+    }
+
+    .callout {
+      padding: 1.1rem 1rem;
+      border-radius: var(--radius-md);
+      background: rgba(239, 68, 68, 0.10);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+    }
+
+    .callout--info {
+      background: rgba(56, 189, 248, 0.10);
+      border-color: rgba(56, 189, 248, 0.18);
+    }
+
+    .callout h2,
+    .callout h3,
+    .panel h2,
+    .section h2 {
+      margin: 0 0 0.55rem;
+      color: var(--title);
+    }
+
+    .callout p,
+    .callout ul {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .callout ul {
+      padding-left: 1.1rem;
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 1.4rem;
+      padding-bottom: 4rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 86px;
+      align-self: start;
+      padding: 1rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .panel {
+      padding: 1.15rem;
+      border-radius: var(--radius-lg);
+      background: color-mix(in srgb, var(--surface) 94%, transparent);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .search {
+      position: relative;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 0.9rem 1rem 0.9rem 2.8rem;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+    }
+
+    .search::before {
+      content: "⌕";
+      position: absolute;
+      left: 0.95rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .toc {
+      display: grid;
+      gap: 0.5rem;
+      max-height: 52vh;
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+
+    .toc a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      padding: 0.72rem 0.85rem;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+
+    .toc a:hover,
+    .toc a.is-active {
+      color: var(--title);
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.2);
+    }
+
+    .content {
+      display: grid;
+      gap: 1.3rem;
+    }
+
+    .section-intro {
+      padding: 1.5rem;
+    }
+
+    .section-intro p {
+      margin: 0.35rem 0 0;
+      color: var(--muted);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.2rem;
+    }
+
+    .toolbar__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.75rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      padding: 1.2rem;
+      border-radius: var(--radius-lg);
+      background: color-mix(in srgb, var(--card) 96%, transparent);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 1rem;
+      min-height: 100%;
+      transition: transform var(--transition), border-color var(--transition), opacity var(--transition);
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(56, 189, 248, 0.25);
+    }
+
+    .card[hidden] {
+      display: none !important;
+    }
+
+    .card__header {
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+    }
+
+    .card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(249, 115, 22, 0.14));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 1.3rem;
+    }
+
+    .card h3 {
+      margin: 0;
+      color: var(--title);
+      font-size: 1.1rem;
+      line-height: 1.2;
+    }
+
+    .card__subtitle {
+      color: var(--muted);
+      font-size: 0.93rem;
+      margin-top: 0.25rem;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.6rem;
+    }
+
+    .tag {
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .tag--danger { background: rgba(239, 68, 68, 0.85); }
+    .tag--warning { background: rgba(245, 158, 11, 0.85); }
+    .tag--info { background: rgba(2, 132, 199, 0.85); }
+
+    details {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.04);
+      overflow: hidden;
+    }
+
+    details + details { margin-top: 0.7rem; }
+
+    summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 0.9rem 1rem;
+      color: var(--title);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: "+";
+      font-size: 1.2rem;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    details[open] summary::after { content: "–"; }
+
+    .details__content {
+      padding: 0 1rem 1rem;
+      color: var(--muted);
+    }
+
+    .details__content p,
+    .details__content ul {
+      margin: 0.5rem 0 0;
+    }
+
+    .details__content ul {
+      padding-left: 1.15rem;
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .empty-state {
+      padding: 1.5rem;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--card-border);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .footer {
+      padding: 2rem 0 4rem;
+    }
+
+    .footer__box {
+      padding: 1.2rem 1.3rem;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .footer p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 1080px) {
+      .hero__grid,
+      .main-grid,
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        top: auto;
+      }
+
+      .hero__stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar__inner,
+      .toolbar {
+        align-items: stretch;
+      }
+
+      .topbar__inner,
+      .hero__actions,
+      .toolbar {
+        flex-direction: column;
+      }
+
+      .topbar__actions,
+      .hero__actions {
+        width: 100%;
+      }
+
+      .topbar__actions > *,
+      .hero__actions > * {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hero {
+        padding-top: 2.5rem;
+      }
+
+      .hero__panel,
+      .hero__side,
+      .section-intro,
+      .panel,
+      .card {
+        padding: 1rem;
+      }
+
+      .hero__stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      .topbar,
+      .sidebar,
+      .hero__actions,
+      .toolbar {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+        color: #111827;
+      }
+
+      .hero__panel,
+      .glass,
+      .panel,
+      .card {
+        box-shadow: none;
+        border: 1px solid #d1d5db;
+        background: white;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar" aria-label="Barra superior">
+    <div class="container topbar__inner">
+      <div class="brand">
+        <div class="brand__badge" aria-hidden="true">📦</div>
+        <div class="brand__text">
+          <strong>Guia de Proibições e Restrições</strong>
+          <span>Resumo interativo baseado no documento anexado</span>
+        </div>
+      </div>
+      <div class="topbar__actions">
+        <a class="button button--ghost" href="#categorias">Ver categorias</a>
+        <a class="button button--primary" href="https://www.genspark.ai/api/files/s/109dBsmk" target="_blank" rel="noreferrer noopener">Abrir PDF original</a>
+        <button class="icon-button" id="themeToggle" type="button" aria-label="Alternar tema">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero__grid">
+        <div class="hero__panel">
+          <span class="eyebrow">Documento convertido em experiência web</span>
+          <h1>Proibições e Restrições Nacionais para envio de encomendas</h1>
+          <p>
+            Esta página organiza de forma clara, visual e acessível os principais itens proibidos para transporte pelos Correios no Brasil, incluindo os motivos da proibição, bases legais, exemplos práticos e observações importantes sobre transporte aéreo e segurança.
+          </p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="#filtros">Explorar conteúdo</a>
+            <button class="button" type="button" id="expandAll">Expandir tudo</button>
+            <button class="button" type="button" id="collapseAll">Recolher tudo</button>
+          </div>
+          <div class="hero__stats" aria-label="Indicadores do conteúdo">
+            <div class="stat">
+              <strong>13</strong>
+              <span>categorias organizadas</span>
+            </div>
+            <div class="stat">
+              <strong>4</strong>
+              <span>camadas por item: conceito, motivo, regra e exemplos</span>
+            </div>
+            <div class="stat">
+              <strong>1</strong>
+              <span>fonte principal oficial anexada</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero__side glass" aria-label="Destaques críticos">
+          <div class="callout">
+            <h2>⚠️ Consequência imediata</h2>
+            <ul>
+              <li>o item proibido não será entregue;</li>
+              <li>não será devolvido ao remetente;</li>
+              <li>poderá ser destruído ou encaminhado às autoridades, sem indenização.</li>
+            </ul>
+          </div>
+          <div class="callout callout--info">
+            <h2>✈️ Atenção ao transporte aéreo</h2>
+            <p>
+              Alguns itens podem ser barrados no modal aéreo conforme regras da Anac. Nesses casos, a encomenda pode seguir por transporte terrestre, alterando o prazo previsto de entrega.
+            </p>
+          </div>
+          <div class="callout callout--info">
+            <h2>✅ Melhor uso desta página</h2>
+            <p>
+              Use a busca para localizar termos como “baterias”, “moedas”, “cigarros” ou “entorpecentes”, e abra os detalhes de cada categoria para leitura rápida e objetiva.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="container main-grid" id="filtros">
+      <aside class="sidebar glass" aria-label="Navegação lateral">
+        <div class="panel">
+          <h2>Busca rápida</h2>
+          <div class="search">
+            <label class="sr-only" for="searchInput">Buscar categoria</label>
+            <input id="searchInput" type="search" placeholder="Buscar por item, exemplo ou termo" autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Navegação</h2>
+          <nav class="toc" id="tocNav" aria-label="Seções do conteúdo">
+            <a href="#visao-geral">Visão geral</a>
+            <a href="#categorias">Categorias proibidas</a>
+            <a href="#rodape-fonte">Fonte</a>
+          </nav>
+        </div>
+
+        <div class="panel">
+          <h2>Leitura orientada</h2>
+          <p style="margin:0;color:var(--muted)">
+            Estrutura pensada com HTML semântico, contraste elevado, navegação por teclado, tema claro/escuro, impressão amigável e interação leve em JavaScript.
+          </p>
+        </div>
+      </aside>
+
+      <div class="content">
+        <section class="glass section-intro" id="visao-geral">
+          <h2>Visão geral do documento</h2>
+          <p>
+            Antes de postar uma encomenda, é essencial verificar se o objeto pode ser transportado. O material anexo informa que determinados itens são totalmente proibidos por representarem risco à saúde, à segurança, aos equipamentos, a outras encomendas ou por violarem normas legais e regulatórias.
+          </p>
+        </section>
+
+        <section class="glass toolbar" aria-label="Ferramentas da lista">
+          <div class="toolbar__meta">
+            <span class="chip">📚 <strong id="visibleCount">13</strong>&nbsp;categorias visíveis</span>
+            <span class="chip">🧭 filtro em tempo real</span>
+            <span class="chip">🖨️ impressão otimizada</span>
+          </div>
+          <div class="toolbar__meta">
+            <span class="chip">Base legal recorrente: Lei Postal nº 6.538/1978</span>
+          </div>
+        </section>
+
+        <section id="categorias" aria-labelledby="categorias-titulo">
+          <div class="glass section-intro" style="margin-bottom:1rem;">
+            <h2 id="categorias-titulo">Categorias proibidas</h2>
+            <p>Cada cartão abaixo reúne definição, motivo da proibição, referência normativa citada no documento e exemplos práticos.</p>
+          </div>
+
+          <div class="cards" id="cardsContainer">
+            <article class="card searchable" id="explosivos" data-search="explosivas inflamáveis gasolina álcool solvente tintas cápsulas gás airsoft airgun cilindros botijões fogos artifício airbags espoletas pólvora dinamite munições cartuchos sprays aerossóis maçarico">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">🔥</div>
+                <div>
+                  <h3>Substâncias explosivas ou facilmente inflamáveis</h3>
+                  <p class="card__subtitle">Risco extremo de incêndio, explosão e danos em cadeia.</p>
+                  <div class="tags">
+                    <span class="tag tag--danger">Risco crítico</span>
+                    <span class="tag tag--warning">Segurança</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Produtos ou materiais que podem explodir ou pegar fogo com facilidade durante manuseio, armazenamento ou transporte.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidas</summary>
+                <div class="details__content">
+                  <p>Representam risco extremo à segurança de pessoas, veículos, equipamentos e demais encomendas, podendo causar ferimentos graves, mortes, danos materiais e contaminação ambiental.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Base legal citada</summary>
+                <div class="details__content">
+                  <p>A Lei Postal nº 6.538/1978 proíbe o envio desse tipo de substância pelos Correios.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Fogos de artifício, pólvora, dinamite, detonadores</li>
+                    <li>Munições e cartuchos</li>
+                    <li>Gasolina, álcool, solventes, tintas, removedores</li>
+                    <li>Sprays e aerossóis inflamáveis</li>
+                    <li>Botijões de gás, extintores, combustível para maçarico</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+
+            <article class="card searchable" id="radioativas" data-search="radioativas radiação urânio tório rádio polônio césio detectores fumaça lixo nuclear laboratório equipamentos médicos industriais">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">☢️</div>
+                <div>
+                  <h3>Substâncias radioativas</h3>
+                  <p class="card__subtitle">Materiais emissores de radiação com alto risco à saúde e ao meio ambiente.</p>
+                  <div class="tags">
+                    <span class="tag tag--danger">Radiação</span>
+                    <span class="tag tag--info">Controle rigoroso</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Materiais que emitem radiação e podem aparecer em pó, líquido, gás ou embutidos em equipamentos médicos e industriais.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidas</summary>
+                <div class="details__content">
+                  <p>A exposição à radiação pode causar doenças graves, contaminar objetos, instalações, solo e água, além de gerar acidentes durante o transporte.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Base legal citada</summary>
+                <div class="details__content">
+                  <p>O documento menciona a Lei Postal nº 6.538/1978 e normas da CNEN, como a CNEN NN 5.01.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Urânio, tório, rádio e polônio</li>
+                    <li>Césio-137</li>
+                    <li>Equipamentos com fontes radioativas</li>
+                    <li>Detectores de fumaça com material radioativo</li>
+                    <li>Lixo nuclear ou resíduos laboratoriais</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+
+            <article class="card searchable" id="deterioraveis" data-search="deterioráveis carnes peixes ovos alimentos frescos estragam apodrecem armazenamento contaminação">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">🥩</div>
+                <div>
+                  <h3>Substâncias deterioráveis</h3>
+                  <p class="card__subtitle">Itens que estragam facilmente e podem comprometer outras encomendas.</p>
+                  <div class="tags">
+                    <span class="tag tag--warning">Perecível</span>
+                    <span class="tag tag--info">Contaminação</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Produtos que apodrecem, se decompõem ou estragam facilmente fora das condições ideais de armazenamento.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidas</summary>
+                <div class="details__content">
+                  <p>Podem causar mau cheiro, atrair insetos, contaminar volumes próximos e gerar problemas de saúde e higiene.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Base legal citada</summary>
+                <div class="details__content">
+                  <p>A Lei Postal nº 6.538/1978 proíbe o envio de substâncias deterioráveis pelos Correios.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Carnes e peixes frescos</li>
+                    <li>Ovos</li>
+                    <li>Alimentos que estragam facilmente</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+
+            <article class="card searchable" id="fetidas" data-search="fétidas nauseantes decomposição odor forte cheiro ruim produtos químicos restos alimentos estragados">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">🤢</div>
+                <div>
+                  <h3>Substâncias fétidas ou nauseantes</h3>
+                  <p class="card__subtitle">Materiais com odor, aspecto ou condição capaz de provocar mal-estar.</p>
+                  <div class="tags">
+                    <span class="tag tag--warning">Odor forte</span>
+                    <span class="tag tag--info">Saúde</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Produtos com cheiro, gosto ou aparência muito desagradável, capazes de causar náusea, vômito, irritação ou desconforto.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidas</summary>
+                <div class="details__content">
+                  <p>Podem prejudicar funcionários, clientes e o ambiente, além de contaminar outros objetos transportados.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Base legal citada</summary>
+                <div class="details__content">
+                  <p>A Lei Postal nº 6.538/1978 proíbe o envio de substâncias fétidas ou nauseantes.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Materiais em decomposição</li>
+                    <li>Produtos químicos com odor forte</li>
+                    <li>Restos de alimentos estragados</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+
+            <article class="card searchable" id="corrosivas" data-search="corrosivas nocivas ácidos solventes baterias inseticidas pesticidas soda cáustica limpeza queimaduras intoxicação">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">🧪</div>
+                <div>
+                  <h3>Substâncias corrosivas ou nocivas</h3>
+                  <p class="card__subtitle">Produtos que podem causar queimaduras, intoxicações ou destruição de materiais.</p>
+                  <div class="tags">
+                    <span class="tag tag--danger">Corrosivo</span>
+                    <span class="tag tag--warning">Tóxico</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Materiais capazes de atacar superfícies, queimar tecidos ou provocar intoxicações, alergias e danos ao organismo.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidas</summary>
+                <div class="details__content">
+                  <p>Podem causar acidentes sérios, queimaduras, contaminação e danos em outras encomendas ou no ambiente logístico.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Base legal citada</summary>
+                <div class="details__content">
+                  <p>O documento atribui a proibição à Lei Postal nº 6.538/1978.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Ácidos fortes e soda cáustica</li>
+                    <li>Produtos de limpeza concentrados</li>
+                    <li>Solventes químicos</li>
+                    <li>Inseticidas e pesticidas tóxicos</li>
+                    <li>Baterias automotivas ou estacionárias</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+
+            <article class="card searchable" id="perigo-geral" data-search="perigo danos produtos químicos tóxicos contaminantes cortantes perfurantes acidentes ferimentos">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">⚠️</div>
+                <div>
+                  <h3>Substâncias que constituam perigo ou possam causar danos</h3>
+                  <p class="card__subtitle">Categoria ampla para materiais com potencial de acidente, ferimento ou contaminação.</p>
+                  <div class="tags">
+                    <span class="tag tag--danger">Perigo geral</span>
+                    <span class="tag tag--info">Proteção operacional</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Itens que, no manuseio ou transporte, podem colocar em risco pessoas, veículos, equipamentos ou outras encomendas.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidas</summary>
+                <div class="details__content">
+                  <p>O objetivo é evitar explosões, incêndios, intoxicações, ferimentos, contaminações e prejuízos materiais.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Base legal citada</summary>
+                <div class="details__content">
+                  <p>A Lei Postal nº 6.538/1978 veda o envio de substâncias cujo transporte constitua perigo ou possa causar danos.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Produtos químicos perigosos</li>
+                    <li>Materiais tóxicos ou contaminantes</li>
+                    <li>Objetos cortantes ou perfurantes sem proteção adequada</li>
+                    <li>Qualquer item que possa danificar outras encomendas</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+
+            <article class="card searchable" id="entorpecentes" data-search="entorpecentes psicotrópicas drogas canabidiol remédios controlados anvisa cocaína crack heroína maconha lsd ecstasy mdma antidepressivos ansiolíticos">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">💊</div>
+                <div>
+                  <h3>Entorpecentes e substâncias psicotrópicas</h3>
+                  <p class="card__subtitle">Drogas e medicamentos controlados só podem circular em hipóteses legalmente autorizadas.</p>
+                  <div class="tags">
+                    <span class="tag tag--danger">Controle especial</span>
+                    <span class="tag tag--warning">Saúde pública</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Drogas e medicamentos que atuam no sistema nervoso central, podendo causar dependência, sedação, alucinações ou alterações de comportamento.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidas</summary>
+                <div class="details__content">
+                  <p>A restrição busca proteger a saúde pública, evitar tráfico, uso indevido, dependência química e infrações legais.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Base legal citada</summary>
+                <div class="details__content">
+                  <p>O documento cita a Lei nº 11.343/2006 e a Lei Postal nº 6.538/1978, admitindo exceções apenas com autorização e documentação específica.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Cocaína, crack, heroína, ópio, morfina</li>
+                    <li>Maconha, LSD, ecstasy e MDMA</li>
+                    <li>Medicamentos controlados sem receita ou autorização</li>
+                    <li>Drogas sintéticas e naturais proibidas pela Anvisa</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+
+            <article class="card searchable" id="ofensivo" data-search="ofensivo ameaçador injurioso xingamentos ameaças insultos discriminação ódio violência símbolos nacionais">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">🚫</div>
+                <div>
+                  <h3>Objetos com conteúdo ofensivo, ameaçador ou injurioso</h3>
+                  <p class="card__subtitle">Mensagens ou elementos gráficos que promovam ameaça, ódio, violência ou desrespeito à ordem pública.</p>
+                  <div class="tags">
+                    <span class="tag tag--danger">Conteúdo proibido</span>
+                    <span class="tag tag--info">Ordem pública</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Encomendas com textos, desenhos ou símbolos ofensivos, ameaçadores, discriminatórios ou que incentivem violência e crimes.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidos</summary>
+                <div class="details__content">
+                  <p>Esse tipo de conteúdo pode causar constrangimento, incitar ódio, ameaçar pessoas, prejudicar a segurança pública e violar leis.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Base legal citada</summary>
+                <div class="details__content">
+                  <p>A Lei Postal nº 6.538/1978 proíbe objetos injuriosos, ameaçadores ou ofensivos à ordem pública e aos interesses do país.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Xingamentos, ameaças ou insultos no endereço ou na embalagem</li>
+                    <li>Mensagens e símbolos de ódio, violência ou discriminação</li>
+                    <li>Conteúdo que desrespeite símbolos nacionais ou promova crimes</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+
+            <article class="card searchable" id="autoridade" data-search="autoridade competente anvisa ibama receita federal polícia exportação importação animais plantas piratas falsificados medicamentos não autorizados moedas estrangeiras">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">🏛️</div>
+                <div>
+                  <h3>Objetos proibidos por autoridade competente</h3>
+                  <p class="card__subtitle">Itens cuja circulação, exportação ou importação tenha sido vedada por órgãos oficiais.</p>
+                  <div class="tags">
+                    <span class="tag tag--warning">Regulação</span>
+                    <span class="tag tag--info">Fiscalização</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Produtos ou materiais proibidos por leis, portarias e regulamentos editados por autoridades como Anvisa, Ibama, Receita Federal e outros órgãos competentes.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidos</summary>
+                <div class="details__content">
+                  <p>O envio pode violar leis brasileiras e afetar saúde, meio ambiente, segurança nacional ou interesses públicos relevantes.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Base legal citada</summary>
+                <div class="details__content">
+                  <p>A Lei Postal nº 6.538/1978 veda objetos cuja circulação, exportação ou importação seja proibida por ato de autoridade competente.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Medicamentos ou produtos não autorizados pela Anvisa</li>
+                    <li>Animais silvestres ou plantas protegidas pelo Ibama</li>
+                    <li>Produtos piratas ou falsificados</li>
+                    <li>Moedas estrangeiras sem autorização</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+
+            <article class="card searchable" id="moedas" data-search="moedas valor corrente notas dinheiro real dólar euro envelope pacote moeda metálica lavagem evasão divisas">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">💵</div>
+                <div>
+                  <h3>Moedas de valor corrente</h3>
+                  <p class="card__subtitle">Notas e moedas oficiais em circulação não podem ser remetidas como encomenda postal.</p>
+                  <div class="tags">
+                    <span class="tag tag--danger">Dinheiro vivo</span>
+                    <span class="tag tag--warning">Risco patrimonial</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Notas e moedas oficiais, brasileiras ou estrangeiras, aptas para pagamento e em circulação regular.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidas</summary>
+                <div class="details__content">
+                  <p>A vedação busca evitar perdas, roubos, furtos e também reduzir risco de crimes como lavagem de dinheiro e evasão de divisas.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Base legal citada</summary>
+                <div class="details__content">
+                  <p>A Lei Postal nº 6.538/1978 proíbe o envio de moeda de valor corrente pelos Correios.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Notas de real, dólar, euro ou outras moedas oficiais</li>
+                    <li>Moedas metálicas em circulação</li>
+                    <li>Envelopes ou pacotes contendo dinheiro vivo</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+
+            <article class="card searchable" id="seguranca-nacional" data-search="segurança nacional espionagem sabotagem terrorismo documentos sigilosos estratégicos armas explosivos propaganda grupos terroristas extremistas">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">🛡️</div>
+                <div>
+                  <h3>Objetos que atentem contra a segurança nacional</h3>
+                  <p class="card__subtitle">Itens, materiais ou informações com potencial de ameaça à defesa e aos interesses do país.</p>
+                  <div class="tags">
+                    <span class="tag tag--danger">Segurança nacional</span>
+                    <span class="tag tag--info">Interesse público</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Produtos, materiais ou informações que possam ser usados em espionagem, sabotagem, terrorismo ou ações contra a ordem pública e a defesa nacional.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidos</summary>
+                <div class="details__content">
+                  <p>Os Correios não podem transportar objetos que coloquem em risco a população, o governo ou a integridade do país.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Base legal citada</summary>
+                <div class="details__content">
+                  <p>A Lei Postal nº 6.538/1978 proíbe o envio de objetos que atentem contra a segurança nacional.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Equipamentos de espionagem</li>
+                    <li>Documentos sigilosos ou estratégicos sem autorização</li>
+                    <li>Materiais para fabricação de armas ou explosivos</li>
+                    <li>Propaganda de grupos terroristas ou extremistas</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+
+            <article class="card searchable" id="tabaco" data-search="cigarros tabaco charutos cigarrilhas narguilé vapes pods dispositivos eletrônicos fumar comércio tabaco similar">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">🚬</div>
+                <div>
+                  <h3>Cigarros, derivados do tabaco e produtos similares</h3>
+                  <p class="card__subtitle">Vedação nacional ao envio de itens de tabaco e dispositivos eletrônicos para fumar.</p>
+                  <div class="tags">
+                    <span class="tag tag--warning">Tabaco</span>
+                    <span class="tag tag--info">Saúde pública</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Cigarros, fumos, charutos, cigarrilhas, tabaco para narguilé, vapes, pods e quaisquer produtos semelhantes feitos com tabaco ou equivalentes.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidos</summary>
+                <div class="details__content">
+                  <p>Segundo o documento, a proibição busca combater o comércio ilegal, proteger a saúde pública e evitar transporte de itens não autorizados, inclusive entre pessoas físicas.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Observação prática</summary>
+                <div class="details__content">
+                  <p>A vedação vale para remessas nacionais, ainda que não haja finalidade comercial declarada.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Cigarros de qualquer marca</li>
+                    <li>Fumo para enrolar, charutos e cigarrilhas</li>
+                    <li>Vapes, pods e dispositivos eletrônicos para fumar</li>
+                    <li>Tabaco para narguilé</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+
+            <article class="card searchable" id="valor-declarado" data-search="valor declarado acima limite joias jóias eletrônicos luxo sedex pac cobertura indenização tabela preços">
+              <div class="card__header">
+                <div class="card__icon" aria-hidden="true">💎</div>
+                <div>
+                  <h3>Mercadorias com valor declarado acima do limite permitido</h3>
+                  <p class="card__subtitle">Itens de alto valor não podem ser aceitos quando excedem o limite do serviço contratado.</p>
+                  <div class="tags">
+                    <span class="tag tag--warning">Limite de cobertura</span>
+                    <span class="tag tag--info">Regra comercial</span>
+                  </div>
+                </div>
+              </div>
+              <details open>
+                <summary>O que são</summary>
+                <div class="details__content">
+                  <p>Encomendas cujo valor declarado ultrapassa o teto previsto nas tabelas dos Correios para serviços como SEDEX e PAC.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Por que são proibidas</summary>
+                <div class="details__content">
+                  <p>Os limites existem para controlar risco logístico e patrimonial. Acima deles, não há cobertura de indenização compatível.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Regra prática</summary>
+                <div class="details__content">
+                  <p>Se o valor exceder o máximo aceito para o serviço, o objeto é recusado e não será transportado.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Exemplos</summary>
+                <div class="details__content">
+                  <ul>
+                    <li>Joias e produtos de luxo acima do limite</li>
+                    <li>Eletrônicos com valor declarado excedente</li>
+                    <li>Qualquer mercadoria acima do máximo permitido na tabela do serviço</li>
+                  </ul>
+                </div>
+              </details>
+            </article>
+          </div>
+
+          <div class="empty-state" id="emptyState" hidden>
+            Nenhuma categoria encontrada para esse filtro. Tente outro termo de busca.
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="glass footer__box" id="rodape-fonte">
+        <h2 style="margin:0;color:var(--title);">Fonte e observações</h2>
+        <p>
+          Conteúdo estruturado a partir do documento <strong>“Proibições e restrições nacionais”</strong> anexado na conversa.
+        </p>
+        <p>
+          Arquivo-base: <a href="https://www.genspark.ai/api/files/s/109dBsmk" target="_blank" rel="noreferrer noopener">Proibições e restrições.pdf</a>
+        </p>
+        <p>
+          Esta página foi desenhada como um guia de consulta rápida, sem substituir a leitura integral do documento oficial e das regras específicas eventualmente aplicáveis ao transporte aéreo.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const root = document.documentElement;
+      const themeToggle = document.getElementById('themeToggle');
+      const savedTheme = localStorage.getItem('page-theme');
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+
+      if (savedTheme) {
+        root.setAttribute('data-theme', savedTheme);
+      } else if (prefersLight) {
+        root.setAttribute('data-theme', 'light');
+      }
+
+      const syncThemeIcon = () => {
+        const isLight = root.getAttribute('data-theme') === 'light';
+        themeToggle.textContent = isLight ? '☀️' : '🌙';
+        themeToggle.setAttribute('aria-label', isLight ? 'Ativar tema escuro' : 'Ativar tema claro');
+      };
+
+      syncThemeIcon();
+
+      themeToggle.addEventListener('click', () => {
+        const nextTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        if (nextTheme === 'dark') {
+          root.removeAttribute('data-theme');
+          localStorage.setItem('page-theme', 'dark');
+        } else {
+          root.setAttribute('data-theme', 'light');
+          localStorage.setItem('page-theme', 'light');
+        }
+        syncThemeIcon();
+      });
+
+      const detailsNodes = Array.from(document.querySelectorAll('.card details'));
+      const expandAllButton = document.getElementById('expandAll');
+      const collapseAllButton = document.getElementById('collapseAll');
+
+      expandAllButton.addEventListener('click', () => {
+        detailsNodes.forEach((node) => { node.open = true; });
+      });
+
+      collapseAllButton.addEventListener('click', () => {
+        detailsNodes.forEach((node, index) => {
+          node.open = index % 4 === 0;
+        });
+      });
+
+      const searchInput = document.getElementById('searchInput');
+      const cards = Array.from(document.querySelectorAll('.searchable'));
+      const visibleCount = document.getElementById('visibleCount');
+      const emptyState = document.getElementById('emptyState');
+      const toc = document.getElementById('tocNav');
+
+      const slugify = (value) => value
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+
+      const categoryLinks = cards.map((card) => {
+        const link = document.createElement('a');
+        link.href = `#${card.id}`;
+        link.textContent = card.querySelector('h3').textContent;
+        toc.insertBefore(link, toc.lastElementChild);
+        return link;
+      });
+
+      const applyFilter = () => {
+        const term = slugify(searchInput.value);
+        let count = 0;
+
+        cards.forEach((card, index) => {
+          const haystack = slugify(card.dataset.search + ' ' + card.textContent);
+          const matches = !term || haystack.includes(term);
+          card.hidden = !matches;
+          if (matches) {
+            count += 1;
+            categoryLinks[index].hidden = false;
+          } else {
+            categoryLinks[index].hidden = true;
+          }
+        });
+
+        visibleCount.textContent = String(count);
+        emptyState.hidden = count !== 0;
+      };
+
+      searchInput.addEventListener('input', applyFilter);
+      applyFilter();
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const link = toc.querySelector(`a[href="#${entry.target.id}"]`);
+          if (!link) return;
+          if (entry.isIntersecting) {
+            toc.querySelectorAll('a').forEach((a) => a.classList.remove('is-active'));
+            link.classList.add('is-active');
+          }
+        });
+      }, { rootMargin: '-20% 0px -70% 0px', threshold: 0.1 });
+
+      document.querySelectorAll('section[id], article[id], footer [id]').forEach((section) => observer.observe(section));
+    })();
+  </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
